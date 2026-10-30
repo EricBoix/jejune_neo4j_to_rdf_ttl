@@ -69,8 +69,13 @@ docker run --rm \
 - **Nodes**: `ex:node_{id}` with `rdf:type neo:Label` and property literals
 - **Relationships without properties**: direct triple
   `ex:node_src neo:REL_TYPE ex:node_tgt`
-- **Relationships with properties**: direct triple plus reification
-  via `rdf:Statement` blank node carrying the property literals
+- **Relationships with properties**: direct triple plus an RDF 1.2 reifier
+  (`_:reifier rdf:reifies <<( ex:node_src neo:REL_TYPE ex:node_tgt )>>`)
+  carrying the property literals
+- **Relationship `chunk_ids`**: one `neo:extractedFrom ex:node_{chunk}` per
+  chunk on the reifier, `chunk` being the `Document` node of that id
+- **Output**: the rdflib Turtle serialisation, followed by the reifiers
+  written as Turtle 1.2 text (rdflib cannot serialise triple terms)
 
 ## Devel debug notes
 

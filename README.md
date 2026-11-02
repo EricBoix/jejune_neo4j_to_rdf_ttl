@@ -65,15 +65,19 @@ docker run --rm \
 ## RDF Mapping
 
 - **Namespaces**: `ex:` = `http://example.org/graph/`,
-  `neo:` = `http://example.org/neo4j/`
+  `neo:` = `http://example.org/neo4j/`,
+  `jejune:` = `urn:jejune:`
 - **Nodes**: `ex:node_{id}` with `rdf:type neo:Label` and property literals
+- **Chunk nodes**: the Neo4j `Document` nodes holding a `text` (and no
+  `__Entity__` label) are typed `jejune:DocumentChunk` instead of `neo:Document`.
+  An LLM-extracted entity typed `Document` remains `neo:Document`
 - **Relationships without properties**: direct triple
   `ex:node_src neo:REL_TYPE ex:node_tgt`
 - **Relationships with properties**: direct triple plus an RDF 1.2 reifier
   (`_:reifier rdf:reifies <<( ex:node_src neo:REL_TYPE ex:node_tgt )>>`)
   carrying the property literals
 - **Relationship `chunk_ids`**: one `neo:extractedFrom ex:node_{chunk}` per
-  chunk on the reifier, `chunk` being the `Document` node of that id
+  chunk on the reifier, `chunk` being the `jejune:DocumentChunk` node of that id
 - **Output**: the rdflib Turtle serialisation, followed by the reifiers
   written as Turtle 1.2 text (rdflib cannot serialise triple terms)
 
